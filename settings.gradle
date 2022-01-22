@@ -5,6 +5,9 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        maven {
+            url "${rootDir}/localRepo"
+        }
 //        jcenter() // Warning: this repository is going to shut down soon
     }
 }

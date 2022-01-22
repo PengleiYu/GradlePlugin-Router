@@ -3,7 +3,7 @@ plugins {
     id 'com.utopia.router'
 }
 
-router{
+router {
     wikiDir rootDir.getAbsolutePath()
 }
 
@@ -41,6 +41,6 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
 
-    implementation project(path: ':router-annotations')
-    annotationProcessor project(path: ':router-processor')
+    implementation 'com.utopia.router:router-annotations:1.0.0'
+    annotationProcessor 'com.utopia.router:router-processor:1.0.0'
 }
