@@ -1,0 +1,28 @@
+apply plugin: 'groovy'
+
+dependencies {
+    implementation gradleApi()
+    implementation localGroovy()
+}
+
+apply plugin: 'maven-publish'
+
+//
+publishing {
+    publications {
+        // 定义插件信息，外界依赖的classPath
+        maven(MavenPublication) {
+            groupId = 'com.utopia.router'
+            artifactId = 'router-gradle-plugin'
+            version = '1.0.0'
+
+            from components.java
+        }
+    }
+    repositories {
+        // 定义本地仓库
+        maven {
+            url("$rootDir/localRepo")
+        }
+    }
+}
