@@ -1,0 +1,13 @@
+apply plugin : 'groovy'
+
+repositories {
+    mavenCentral()
+    google()
+}
+
+dependencies {
+    implementation gradleApi()
+    implementation localGroovy()
+}
+
+//println "buildSrc: project=${project.name}, path=${project.path}, dir=${project.projectDir}"
