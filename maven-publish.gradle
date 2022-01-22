@@ -1,0 +1,36 @@
+apply plugin: 'maven-publish'
+
+Properties gradleProperties = new Properties()
+gradleProperties.load(project.rootProject.file('gradle.properties').newDataInputStream())
+
+def POM_URL = gradleProperties.getProperty('POM_URL')
+def GROUP_ID = gradleProperties.getProperty('GROUP_ID')
+def VERSION_NAME = gradleProperties.getProperty('VERSION_NAME')
+
+Properties projectProperties = new Properties()
+projectProperties.load(project.file('gradle.properties').newDataInputStream())
+def POM_ARTIFACT_ID = projectProperties.getProperty('POM_ARTIFACT_ID')
+
+println "maven-publish POM_URL = $POM_URL"
+println "maven-publish GROUP_ID = $GROUP_ID"
+println "maven-publish POM_ARTIFACT_ID = $POM_ARTIFACT_ID"
+println "maven-publish VERSION_NAME = $VERSION_NAME"
+
+publishing {
+    publications {
+        // 定义插件信息，外界依赖的classPath
+        maven(MavenPublication) {
+            groupId = GROUP_ID
+            artifactId = POM_ARTIFACT_ID
+            version = VERSION_NAME
+
+            from components.java
+        }
+    }
+    repositories {
+        // 定义本地仓库
+        maven {
+            url(POM_URL)
+        }
+    }
+}
