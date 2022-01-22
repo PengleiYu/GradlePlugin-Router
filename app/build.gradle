@@ -3,6 +3,10 @@ plugins {
     id 'com.utopia.router'
 }
 
+router{
+    wikiDir rootDir.getAbsolutePath()
+}
+
 android {
     compileSdk 31
 
