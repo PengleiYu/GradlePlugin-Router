@@ -1,9 +1,15 @@
 package com.utopia.demorouter;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
 
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.utopia.router_annotations.Destination;
+
+@Destination(
+    url = "router://page-home",
+    description = "个人主页"
+)
 public class MainActivity extends AppCompatActivity {
 
   @Override

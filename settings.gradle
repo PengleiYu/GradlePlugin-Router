@@ -11,3 +11,4 @@ dependencyResolutionManagement {
 rootProject.name = "DemoRouter"
 include ':app'
 include(":router-gradle-plugin")
+include ':router-annotations'
