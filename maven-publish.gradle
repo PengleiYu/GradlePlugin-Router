@@ -11,11 +11,6 @@ Properties projectProperties = new Properties()
 projectProperties.load(project.file('gradle.properties').newDataInputStream())
 def POM_ARTIFACT_ID = projectProperties.getProperty('POM_ARTIFACT_ID')
 
-println "maven-publish POM_URL = $POM_URL"
-println "maven-publish GROUP_ID = $GROUP_ID"
-println "maven-publish POM_ARTIFACT_ID = $POM_ARTIFACT_ID"
-println "maven-publish VERSION_NAME = $VERSION_NAME"
-
 publishing {
     publications {
         // 定义插件信息，外界依赖的classPath

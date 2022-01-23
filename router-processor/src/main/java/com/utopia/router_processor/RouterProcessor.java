@@ -51,9 +51,6 @@ public class RouterProcessor extends AbstractProcessor {
       return false;
     }
 
-    String rootProjectDir = processingEnv.getOptions().get("root_project_dir");
-    log("rootProjectDir=" + rootProjectDir);
-
     log(">>>> APT开始处理");
 
     String pkg = "com.utopia.mapping";
@@ -103,7 +100,6 @@ public class RouterProcessor extends AbstractProcessor {
         .append("  }\n")
         .append("}");
 
-
     try (OutputStream outputStream = processingEnv.getFiler().createSourceFile(fullName).openOutputStream();
          Writer writer = new OutputStreamWriter(outputStream)) {
       writer.write(builder.toString());
@@ -112,6 +108,7 @@ public class RouterProcessor extends AbstractProcessor {
       e.printStackTrace();
     }
 
+    String rootProjectDir = processingEnv.getOptions().get("root_project_dir");
     File rootDir = new File(rootProjectDir);
     if (!rootDir.exists()) {
       throw new RuntimeException("rootDir不存在");

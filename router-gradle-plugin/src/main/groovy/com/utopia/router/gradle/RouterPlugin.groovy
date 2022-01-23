@@ -7,7 +7,6 @@ import org.gradle.api.Project
 class RouterPlugin implements Plugin<Project> {
     @Override
     void apply(Project project) {
-        println "RouterPlugin: apply from ${project.name}"
 
         def rootProjectDir = project.rootProject.projectDir
         // 1. 自动帮用户传递路径参数到注解处理器中
@@ -26,24 +25,22 @@ class RouterPlugin implements Plugin<Project> {
         }
 
         project.extensions.create("router", RouterExtension)
-
         project.afterEvaluate {
-            println "it.type=${it.class}"
             stepMarkdown(it)
         }
     }
 
     private static void stepMarkdown(Project project) {
-        def rootProjectDir = project.rootProject.projectDir
         RouterExtension extension = project["router"]
-        println "用户设置的wikiDir:${extension.wikiDir}"
+
+        def rootProjectDir = project.rootProject.projectDir
 
         // 3. javac任务后，汇总生成文档
         project.tasks.findAll {
             it.name.startsWith("compile") && it.name.endsWith("JavaWithJavac")
         }.each {
-            println "filtered task: $it.name"
             it.doLast {
+                println "after task: $it.name"
                 File routerMappingDir = new File(rootProjectDir, "router_mapping")
                 if (!routerMappingDir.exists()) {
                     return
