@@ -1,7 +1,7 @@
 plugins {
     id 'com.android.application'
-    id 'kotlin-android'
-    id 'kotlin-kapt'
+//    id 'kotlin-android'
+//    id 'kotlin-kapt'
     id 'com.utopia.router'
 }
 
@@ -20,6 +20,12 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                argument "root_project_dir", rootProject.projectDir.absolutePath
+            }
+        }
     }
 
     buildTypes {
@@ -31,11 +37,6 @@ android {
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
-    }
-    kapt {
-        arguments {
-            arg("root_project_dir", rootProject.projectDir.absolutePath)
-        }
     }
 }
 
@@ -49,5 +50,5 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
 
     implementation 'com.utopia.router:router-annotations:1.0.0'
-    kapt 'com.utopia.router:router-processor:1.0.0'
+    annotationProcessor 'com.utopia.router:router-processor:1.0.0'
 }
