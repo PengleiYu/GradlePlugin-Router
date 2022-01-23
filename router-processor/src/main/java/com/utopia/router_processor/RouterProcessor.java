@@ -1,5 +1,8 @@
 package com.utopia.router_processor;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
@@ -17,6 +20,10 @@ import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
 
 import com.google.auto.service.AutoService;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import com.utopia.router_annotations.Destination;
 
 @SupportedSourceVersion(SourceVersion.RELEASE_8)
@@ -63,6 +70,8 @@ public class RouterProcessor extends AbstractProcessor {
         .append("  public static Map<String, String> getMapping() {\n")
         .append("    Map<String, String> mapping = new HashMap<>();\n");
 
+    JsonArray jsonArray = new JsonArray();
+
     for (Element elem : elements) {
       if (!(elem instanceof TypeElement)) {
         error(elem.getKind().name() + " element is not TypeElement");
@@ -83,15 +92,43 @@ public class RouterProcessor extends AbstractProcessor {
 
       String line = "    mapping.put(\"" + url + "\", \"" + realPath + "\");\n";
       builder.append(line);
+
+      JsonObject jsonObject = new JsonObject();
+      jsonObject.addProperty("url", url);
+      jsonObject.addProperty("description", description);
+      jsonObject.addProperty("realPath", realPath);
+      jsonArray.add(jsonObject);
     }
     builder.append("    return mapping;\n")
         .append("  }\n")
         .append("}");
 
-    // 开始生成java文件
+
     try (OutputStream outputStream = processingEnv.getFiler().createSourceFile(fullName).openOutputStream();
          Writer writer = new OutputStreamWriter(outputStream)) {
       writer.write(builder.toString());
+      log("写入java文件");
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+
+    File rootDir = new File(rootProjectDir);
+    if (!rootDir.exists()) {
+      throw new RuntimeException("rootDir不存在");
+    }
+    File routerFileDir = new File(rootDir, "router_mapping");
+    if (!routerFileDir.exists()) {
+      routerFileDir.mkdir();
+    }
+    File mappingFile = new File(routerFileDir, "mapping_" + System.currentTimeMillis() + ".json");
+    try (
+        BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(mappingFile)))
+    ) {
+      Gson gson = new GsonBuilder()
+          .setPrettyPrinting()
+          .create();
+      writer.write(gson.toJson(jsonArray));
+      log("写入json文件");
     } catch (IOException e) {
       e.printStackTrace();
     }
