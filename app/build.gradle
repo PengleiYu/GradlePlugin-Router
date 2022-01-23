@@ -6,7 +6,7 @@ plugins {
 }
 
 router {
-    wikiDir rootDir.getAbsolutePath()
+    wikiDir rootDir.getAbsolutePath() + "/router_mapping"
 }
 
 android {
@@ -31,11 +31,6 @@ android {
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
-    }
-    kapt {
-        arguments {
-            arg("root_project_dir", rootProject.projectDir.absolutePath)
-        }
     }
 }
 
