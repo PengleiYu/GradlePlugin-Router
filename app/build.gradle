@@ -32,6 +32,11 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    kapt {
+        arguments {
+            arg("root_project_dir", rootProject.projectDir.absolutePath)
+        }
+    }
 }
 
 dependencies {

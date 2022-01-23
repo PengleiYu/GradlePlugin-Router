@@ -43,6 +43,10 @@ public class RouterProcessor extends AbstractProcessor {
       log("没有被" + annotationFullName + "注解的类");
       return false;
     }
+
+    String rootProjectDir = processingEnv.getOptions().get("root_project_dir");
+    log("rootProjectDir=" + rootProjectDir);
+
     log(">>>> APT开始处理");
 
     String pkg = "com.utopia.mapping";
