@@ -3,6 +3,9 @@ apply plugin: 'groovy'
 dependencies {
     implementation gradleApi()
     implementation localGroovy()
+    implementation 'com.android.tools.build:gradle:7.0.4'
+    // 需要该工具类
+    implementation 'com.android.tools:common:30.0.4'
 }
 
 apply plugin: 'maven-publish'

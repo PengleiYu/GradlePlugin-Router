@@ -1,5 +1,7 @@
 package com.utopia.router.gradle
 
+import com.android.build.gradle.AppExtension
+import com.android.build.gradle.AppPlugin
 import groovy.json.JsonSlurper
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -7,6 +9,12 @@ import org.gradle.api.Project
 class RouterPlugin implements Plugin<Project> {
     @Override
     void apply(Project project) {
+        // 注册transform
+        if (project.plugins.hasPlugin(AppPlugin)) {
+            def appExtension = project.extensions.getByType(AppExtension)
+            def transform = new RouterMappingTransform()
+            appExtension.registerTransform(transform)
+        }
 
         def rootProjectDir = project.rootProject.projectDir
         // 1. 自动帮用户传递路径参数到注解处理器中
