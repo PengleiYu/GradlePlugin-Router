@@ -18,6 +18,7 @@ import javax.annotation.processing.SupportedSourceVersion;
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
+import javax.tools.Diagnostic;
 
 import com.google.auto.service.AutoService;
 import com.google.gson.Gson;
@@ -105,13 +106,19 @@ public class RouterProcessor extends AbstractProcessor {
       writer.write(builder.toString());
       log("写入java文件");
     } catch (IOException e) {
-      e.printStackTrace();
+      error("写入java文件失败，"+e.getLocalizedMessage());
     }
 
-    String rootProjectDir = processingEnv.getOptions().get("root_project_dir");
+    String keyRootProjectDir = "root_project_dir";
+    String rootProjectDir = processingEnv.getOptions().get(keyRootProjectDir);
+    if (rootProjectDir == null) {
+      error(keyRootProjectDir + "没有配置");
+      return false;
+    }
     File rootDir = new File(rootProjectDir);
     if (!rootDir.exists()) {
-      throw new RuntimeException("rootDir不存在");
+      error("rootDir不存在");
+      return false;
     }
     File routerFileDir = new File(rootDir, "router_mapping");
     if (!routerFileDir.exists()) {
@@ -136,11 +143,13 @@ public class RouterProcessor extends AbstractProcessor {
   }
 
   private void log(String msg) {
-    System.out.println(TAG + " : " + msg);
+    String s = TAG + " : " + msg;
+    processingEnv.getMessager().printMessage(Diagnostic.Kind.NOTE, s);
   }
 
   private void error(String msg) {
-    System.err.println(TAG + " : " + msg);
+    String s = TAG + " : " + msg;
+    processingEnv.getMessager().printMessage(Diagnostic.Kind.ERROR, s);
   }
 
   @Override
