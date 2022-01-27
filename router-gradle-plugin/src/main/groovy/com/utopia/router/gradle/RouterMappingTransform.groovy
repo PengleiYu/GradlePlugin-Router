@@ -5,6 +5,8 @@ import com.android.build.gradle.internal.pipeline.TransformManager
 import com.android.utils.FileUtils
 
 class RouterMappingTransform extends Transform {
+    private RouterMappingCollector mCollector = new RouterMappingCollector()
+
     @Override
     String getName() {
         return "RouterMappingTransform"
@@ -37,12 +39,18 @@ class RouterMappingTransform extends Transform {
                 def destDir = transformInvocation.outputProvider
                         .getContentLocation(it.name, it.contentTypes, it.scopes, Format.DIRECTORY)
                 FileUtils.copyDirectory(it.file, destDir)
+
+                mCollector.collectFile(it.file)
             }
             it.jarInputs.each {
                 def destJar = transformInvocation.outputProvider
                         .getContentLocation(it.name, it.contentTypes, it.scopes, Format.JAR)
                 FileUtils.copyFile(it.file, destJar)
+
+                mCollector.collectFromJar(it.file)
             }
         }
+
+        println "collector = ${mCollector.getMappingClzNames()}"
     }
 }
