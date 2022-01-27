@@ -8,7 +8,7 @@ import org.objectweb.asm.Opcodes
 class MappingCodes implements Opcodes {
 
 
-    public static final String CLZ_NAME = "com/utopia/mapping/RouterMapping"
+    public static final String CLZ_NAME = "com/utopia/mapping/generated/RouterMapping"
 
     static byte[] getBytes(Set<String> clzNames) throws Exception {
 
@@ -27,50 +27,23 @@ class MappingCodes implements Opcodes {
             methodVisitor.visitEnd();
         }
         {
-            methodVisitor = classWriter.visitMethod(ACC_PUBLIC | ACC_STATIC, "getRouters", "()Ljava/util/Map;", "()Ljava/util/Map<Ljava/lang/String;Ljava/lang/String;>;", null);
+            methodVisitor = classWriter.visitMethod(ACC_PUBLIC | ACC_STATIC, "getMapping", "()Ljava/util/Map;", "()Ljava/util/Map<Ljava/lang/String;Ljava/lang/String;>;", null);
             methodVisitor.visitCode();
             methodVisitor.visitTypeInsn(NEW, "java/util/HashMap");
             methodVisitor.visitInsn(DUP);
             methodVisitor.visitMethodInsn(INVOKESPECIAL, "java/util/HashMap", "<init>", "()V", false);
             methodVisitor.visitVarInsn(ASTORE, 0);
-            methodVisitor.visitVarInsn(ALOAD, 0);
-            methodVisitor.visitLdcInsn("key1");
-            methodVisitor.visitLdcInsn("value1");
-            methodVisitor.visitMethodInsn(INVOKEINTERFACE, "java/util/Map", "put", "(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;", true);
-            methodVisitor.visitInsn(POP);
-            methodVisitor.visitVarInsn(ALOAD, 0);
-            methodVisitor.visitLdcInsn("key2");
-            methodVisitor.visitLdcInsn("value2");
-            methodVisitor.visitMethodInsn(INVOKEINTERFACE, "java/util/Map", "put", "(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;", true);
-            methodVisitor.visitInsn(POP);
-            methodVisitor.visitVarInsn(ALOAD, 0);
-            methodVisitor.visitLdcInsn("key3");
-            methodVisitor.visitLdcInsn("value2");
-            methodVisitor.visitMethodInsn(INVOKEINTERFACE, "java/util/Map", "put", "(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;", true);
-            methodVisitor.visitInsn(POP);
-            methodVisitor.visitVarInsn(ALOAD, 0);
-            methodVisitor.visitLdcInsn("key4");
-            methodVisitor.visitLdcInsn("value2");
-            methodVisitor.visitMethodInsn(INVOKEINTERFACE, "java/util/Map", "put", "(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;", true);
-            methodVisitor.visitInsn(POP);
-            methodVisitor.visitVarInsn(ALOAD, 0);
-            methodVisitor.visitLdcInsn("key5");
-            methodVisitor.visitLdcInsn("value2");
-            methodVisitor.visitMethodInsn(INVOKEINTERFACE, "java/util/Map", "put", "(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;", true);
-            methodVisitor.visitInsn(POP);
-            methodVisitor.visitVarInsn(ALOAD, 0);
-            methodVisitor.visitLdcInsn("key6");
-            methodVisitor.visitLdcInsn("value2");
-            methodVisitor.visitMethodInsn(INVOKEINTERFACE, "java/util/Map", "put", "(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;", true);
-            methodVisitor.visitInsn(POP);
-            methodVisitor.visitVarInsn(ALOAD, 0);
-            methodVisitor.visitLdcInsn("key7");
-            methodVisitor.visitLdcInsn("value2");
-            methodVisitor.visitMethodInsn(INVOKEINTERFACE, "java/util/Map", "put", "(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;", true);
-            methodVisitor.visitInsn(POP);
+
+            clzNames.each {
+                methodVisitor.visitVarInsn(ALOAD, 0);
+                methodVisitor.visitMethodInsn(INVOKESTATIC, "com/utopia/mapping/$it", "getMapping",
+                        "()Ljava/util/Map;", false);
+                methodVisitor.visitMethodInsn(INVOKEINTERFACE, "java/util/Map", "putAll", "(Ljava/util/Map;)V", true);
+            }
+
             methodVisitor.visitVarInsn(ALOAD, 0);
             methodVisitor.visitInsn(ARETURN);
-            methodVisitor.visitMaxs(3, 1);
+            methodVisitor.visitMaxs(2, 1);
             methodVisitor.visitEnd();
         }
         classWriter.visitEnd();
