@@ -21,3 +21,4 @@ include ':router-processor'
 //    println "[all-task] $it.name"
 //}
 include ':module-biz'
+include ':router-runtime'
