@@ -4,6 +4,9 @@ import com.android.build.api.transform.*
 import com.android.build.gradle.internal.pipeline.TransformManager
 import com.android.utils.FileUtils
 
+import java.util.jar.JarOutputStream
+import java.util.zip.ZipEntry
+
 class RouterMappingTransform extends Transform {
     private RouterMappingCollector mCollector = new RouterMappingCollector()
 
@@ -52,5 +55,26 @@ class RouterMappingTransform extends Transform {
         }
 
         println "collector = ${mCollector.getMappingClzNames()}"
+        // 准备字节码文件
+        def mappingFile = transformInvocation.outputProvider.getContentLocation(
+                "router_mapping",
+                getOutputTypes(),
+                getScopes(),
+                Format.JAR)
+
+        println "mappingFile = $mappingFile"
+        if (!mappingFile.getParentFile().exists()) {
+            mappingFile.getParentFile().mkdirs()
+        }
+        if (mappingFile.exists()) {
+            mappingFile.delete()
+        }
+        // 写入字节码
+        try (def jarOutputStream = new JarOutputStream(new FileOutputStream(mappingFile))) {
+            def entry = new ZipEntry(MappingCodes.CLZ_NAME + ".class")
+            jarOutputStream.putNextEntry(entry)
+            jarOutputStream.write(MappingCodes.getBytes(mCollector.getMappingClzNames()))
+            jarOutputStream.closeEntry()
+        }
     }
 }

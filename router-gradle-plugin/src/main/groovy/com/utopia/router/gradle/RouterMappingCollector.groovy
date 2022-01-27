@@ -4,7 +4,7 @@ package com.utopia.router.gradle
 import java.util.jar.JarFile
 
 class RouterMappingCollector {
-    private static final String PACKAGE_NAME = "com/utopia/mapping"
+    public static final String PACKAGE_NAME = "com/utopia/mapping"
     private static final String CLASS_NAME_PREFIX = "RouterMapping_"
     private static final String CLASS_FILE_SUFFIX = ".class"
 
