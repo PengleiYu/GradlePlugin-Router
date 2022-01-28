@@ -11,21 +11,24 @@ Properties projectProperties = new Properties()
 projectProperties.load(project.file('gradle.properties').newDataInputStream())
 def POM_ARTIFACT_ID = projectProperties.getProperty('POM_ARTIFACT_ID')
 
-publishing {
-    publications {
-        // 定义插件信息，外界依赖的classPath
-        maven(MavenPublication) {
-            groupId = GROUP_ID
-            artifactId = POM_ARTIFACT_ID
-            version = VERSION_NAME
+afterEvaluate {
+    publishing {
+        publications {
+            // 定义插件信息，外界依赖的classPath
+            maven(MavenPublication) {
+                println "components.names=${components.getNames()}"
+                from components.findByName("java") ? components.java : components.release
 
-            from components.java
+                groupId = GROUP_ID
+                artifactId = POM_ARTIFACT_ID
+                version = VERSION_NAME
+            }
         }
-    }
-    repositories {
-        // 定义本地仓库
-        maven {
-            url(POM_URL)
+        repositories {
+            // 定义本地仓库
+            maven {
+                url(POM_URL)
+            }
         }
     }
 }
